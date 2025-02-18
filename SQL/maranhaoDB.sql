@@ -49,9 +49,6 @@ select
 	preco, 
 	qtdEstoque 
 		from produto;
-select 
-	* 
-	from produto;
 
 -- Obter o histórico de pedidos realizados.
 select 
@@ -64,20 +61,25 @@ order by 1 desc;
 -- Verificar quais pratos foram pedidos em uma determinada comanda.
 select 
 	nomePedido as pratos,
-	qtdPedido as Qtd
+	sum(qtdPedido) as Qtd
 		from pedido p
 			inner join comanda c
 				on p.idComanda = c.idcomanda
-		where c.clientenome = 'Carlos Silva';
+		where c.idcomanda = 9
+group by nomePedido;
 
-select * from pedido;
 
 -- Calcular o total gasto por cada comanda.
-
-select idComanda, sum(pr.preco) as "preço", sum(pe.qtdPedido) from produto as pr
+select idComanda, sum(pr.preco) as "preço", sum(pe.qtdPedido) as Qtd from produto as pr
 	inner join pedido as pe
 		on pr.idproduto = pe.idproduto
-group by idComanda, qtdPedido;
+	group by idComanda
+order by 2 desc;
 
 -- Implemente uma consulta SQL para identificar qual prato foi o mais pedido e quantas vezes ele foi solicitado.
-
+select pr.nome as Prato, sum(pe.qtdpedido) as "Total pedido" from produto as pr
+	inner join pedido as pe
+		on pr.idproduto = pe.idproduto
+	group by pr.nome, pe.qtdPedido
+order by 2 desc
+limit 1;
