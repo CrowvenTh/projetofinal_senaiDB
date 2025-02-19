@@ -1,0 +1,5 @@
+host = "dpg-cuhulbogph6c73b49ong-a.oregon-postgres.render.com",
+port = "5432",
+dbname = "senaidb_b3yd",
+user = "senaidb_b3yd_user",
+password = "WKp3FSCQsCIW7M4pAUgF3M7rqqDLAgMA"
