@@ -1,5 +1,4 @@
 -- create schema if not exists churrascoMaranhao default character set utf8;
-drop database churrascoMaranhao;
 create database churrascoMaranhao;
 
 -- use churrascoMaranhao;
@@ -23,6 +22,8 @@ create table if not exists comanda(
 		constraint PK_comanda primary key(idComanda)
 );
 
+alter table comanda alter column fechamento drop not null;
+
 create table if not exists pedido(
 	idPedido serial,
     idComanda int,
@@ -38,9 +39,17 @@ create table if not exists pedido(
 -- CONSULTAS
 -- Listar todas as comandas abertas.
 select 
-	abertura 
-		from comanda
-	where fechamento = null;
+	mesa as Mesa,
+	clientenome as Cliente,	
+	abertura as Abertura,
+-- 	fechamento,
+	nomepedido as Pedido,
+	qtdpedido as Quantidade
+from comanda c 
+	inner join 
+		pedido p
+			on c.idcomanda = p.idcomanda
+				where fechamento is null;
 
 -- Consultar o cardápio completo.
 select 
@@ -83,3 +92,33 @@ select pr.nome as Prato, sum(pe.qtdpedido) as "Total pedido" from produto as pr
 	group by pr.nome, pe.qtdPedido
 order by 2 desc
 limit 1;
+
+
+CREATE OR REPLACE FUNCTION atualizar_estoque()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE produto
+    SET qtdestoque = qtdestoque - NEW.qtdpedido
+    WHERE idproduto = NEW.idproduto;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER estoque
+AFTER INSERT ON pedido
+FOR EACH ROW
+EXECUTE FUNCTION atualizar_estoque();
+
+INSERT INTO pedido (idProduto, qtdPedido,nomepedido, datapedido) VALUES (4, 5, 'Cerveja', now()); 
+
+select 
+	pr.idproduto as ID, 
+	pe.nomepedido as prato, 
+	sum(pe.qtdpedido) as pedido,
+	pr.qtdestoque as Estoque 
+from
+	produto as pr
+		inner join pedido as pe
+			on pr.idproduto = pe.idproduto
+		group by pe.nomepedido, pr.idproduto, pe.qtdpedido;
+

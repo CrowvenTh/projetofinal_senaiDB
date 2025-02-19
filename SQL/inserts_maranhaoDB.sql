@@ -68,6 +68,10 @@ VALUES
   (18, 'Carla Souza', '2025-02-13 18:20:00', '2025-02-13 20:50:00'),
   (19, 'Felipe Lima', '2025-02-13 18:50:00', '2025-02-13 21:10:00'),
   (20, 'Robson Almeida', '2025-02-13 19:10:00', '2025-02-13 21:40:00');
+  (38, 21, 'Paulo Mantega', '2025-02-13 18:15:00', null);
+  (39, 22, 'Mauro coelho', '2025-02-05 19:40:00', null);
+  (40, 23, 'Maira Faisão', '2025-02-19 20:50:00', null);
+
 
   INSERT INTO pedido (idComanda, idProduto, dataPedido, nomePedido, qtdPedido)
 VALUES
@@ -93,6 +97,10 @@ VALUES
   (18, 11, '2025-02-13 18:25:00', 'Chopp', 3),
   (19, 7, '2025-02-13 19:00:00', 'Coxinha', 3),
   (20, 6, '2025-02-13 19:15:00', 'Feijão Tropeiro', 1);
+
+  (41, 38, 17, '2025-02-13 18:15:00', 'Suco Natural', 4),
+  (42, 39, 12, '2025-02-05 19:40:00', 'Coxinha', 8),
+  (43, 40, 15, '2025-02-19 20:50:00', 'Espetinho de Queijo', 5);
 
   select * from pedido;
   select * from comanda;
